@@ -170,6 +170,14 @@ export function extractAtoms(node: FormulaNode): string[] {
   return Array.from(atoms).sort();
 }
 
+/**
+ * Extract atomic propositions used in the formula as a Set.
+ * Useful for efficient membership checks (e.g., formula-aware graph filtering).
+ */
+export function extractAtomSet(node: FormulaNode): Set<string> {
+  return new Set(extractAtoms(node));
+}
+
 // Structural Equality
 
 /**

@@ -1,18 +1,17 @@
 /**
  * Logic profile system: presets, custom constraint mode, conflict detection.
+ *
+ * PRESET_DEFINITIONS is derived from the central FRAME_REGISTRY.
+ * Do NOT maintain preset definitions manually here.
  */
 import type { LogicPreset, LogicProfile, FrameConstraint, ConflictError } from './types';
+import { getFrameRegistry, detectMatchingPreset } from './frameRegistry';
 
-export const PRESET_DEFINITIONS: Record<LogicPreset, FrameConstraint[]> = {
-  K: [],
-  T: ['reflexive'],
-  K4: ['transitive'],
-  KD: ['serial'],
-  KB: ['symmetric'],
-  S4: ['reflexive', 'transitive'],
-  S5: ['reflexive', 'euclidean'],
-  KD45: ['serial', 'transitive', 'euclidean'],
-};
+// Derived from the central FRAME_REGISTRY — NOT a separate source of truth.
+export const PRESET_DEFINITIONS: Record<LogicPreset, FrameConstraint[]> =
+  Object.fromEntries(
+    getFrameRegistry().map(f => [f.name, [...f.constraints]])
+  ) as Record<LogicPreset, FrameConstraint[]>;
 
 // Conflict Detection
 
@@ -48,17 +47,11 @@ export function resolveProfile(profile: LogicProfile): FrameConstraint[] {
   return profile.constraints;
 }
 
-// Preset Matching
+// Preset Matching — delegates to the central registry
 
 export function matchPreset(constraints: FrameConstraint[]): LogicPreset | null {
-  const sorted = [...constraints].sort();
-  for (const [preset, presetConstraints] of Object.entries(PRESET_DEFINITIONS)) {
-    const presetSorted = [...presetConstraints].sort();
-    if (sorted.length === presetSorted.length && sorted.every((c, i) => c === presetSorted[i])) {
-      return preset as LogicPreset;
-    }
-  }
-  return null;
+  const match = detectMatchingPreset(constraints);
+  return match ? match.name : null;
 }
 
 // Constraint Categories 

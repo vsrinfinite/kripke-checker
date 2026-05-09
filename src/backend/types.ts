@@ -42,6 +42,12 @@ export type FrameConstraint =
 
 export type LogicPreset = 'K' | 'T' | 'K4' | 'KD' | 'KB' | 'S4' | 'S5' | 'KD45';
 
+export interface NamedFrameDefinition {
+  name: LogicPreset;
+  constraints: FrameConstraint[];
+  description: string;
+}
+
 export interface LogicProfile {
   mode: 'preset' | 'custom';
   preset: LogicPreset | null;
@@ -141,6 +147,7 @@ export interface DotOptions {
   highlightWorlds?: string[];
   highlightEdges?: [string, string][];
   worldLabels?: Record<string, string>;
+  atomFilter?: string[];
 }
 
 //  Public API

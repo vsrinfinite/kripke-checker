@@ -3,7 +3,10 @@ import { getAtomsAtWorld } from './model';
 
 export function modelToDot(model: KripkeModel, options: DotOptions = {}): string {
   const lines: string[] = [];
-  const { title, startWorld, highlightWorlds = [], highlightEdges = [] } = options;
+  const { title, startWorld, highlightWorlds = [], highlightEdges = [], atomFilter } = options;
+
+  // Convert atomFilter array to Set for efficient lookup
+  const atomFilterSet = atomFilter ? new Set(atomFilter) : null;
 
   lines.push('digraph KripkeModel {');
   lines.push('  rankdir=LR;');
@@ -18,7 +21,13 @@ export function modelToDot(model: KripkeModel, options: DotOptions = {}): string
 
   // Nodes
   for (const w of model.worlds) {
-    const atoms = getAtomsAtWorld(model, w);
+    let atoms = getAtomsAtWorld(model, w);
+
+    // Apply atom filter for formula-aware display mode
+    if (atomFilterSet) {
+      atoms = atoms.filter(a => atomFilterSet.has(a));
+    }
+
     const label = options.worldLabels?.[w] ?? (atoms.length > 0 ? `${w}\\n{${atoms.join(', ')}}` : w);
     const attrs: string[] = [`label="${label}"`];
 
@@ -45,3 +54,4 @@ export function modelToDot(model: KripkeModel, options: DotOptions = {}): string
   lines.push('}');
   return lines.join('\n');
 }
+
