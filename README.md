@@ -1,6 +1,7 @@
 # Modal Logic Model Checker
-
 A robust, test-driven modal logic model checker for finite Kripke models. This tool supports parsing, normalization, and bottom-up model checking with configurable frame constraints, along with a functional React frontend for interactive exploration.
+
+Live Demo at: https://vsrinfinite.github.io/kripke-checker/
 
 ## Quick Start
 
