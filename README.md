@@ -94,34 +94,82 @@ After clicking **Run Check**:
 
 The project is a monorepo with a pure TypeScript backend library consumed directly by the React frontend:
 
-```
-src/
-  backend/          # Pure TypeScript library (no server)
-    types.ts        # All type definitions
-    frameRegistry.ts # Central frame registry (single source of truth)
-    symbolMap.ts    # ASCII ↔ Unicode mapping
-    ast.ts          # AST factories and utilities
-    lexer.ts        # Tokenizer
-    parser.ts       # Recursive descent parser
-    normalizer.ts   # Formula rewriting
-    model.ts        # Kripke model validation
-    constraints.ts  # Frame constraint checkers
-    logicProfile.ts # Preset/custom logic profiles (derived from registry)
-    checker.ts      # Bottom-up model checker
-    dot.ts          # DOT graph generator (with atomFilter support)
-    graphUtils.ts   # Graph utility functions
-    service.ts      # Public API orchestrator
-    index.ts        # Re-exports
-  frontend/         # React + Tailwind UI
-    components/     # UI components
-    hooks/          # React hooks
-    App.tsx         # Main app
-  components/
-    modal-logic-wireframe.tsx  # Original wireframe (preserved)
-tests/
-  backend/          # Unit tests (13 files)
-  integration/      # Integration tests
-docs/               # Documentation (LaTeX-standardized)
+```text
+kripke-checker/
+  package.json          # Project dependencies & scripts
+  tsconfig.json         # TypeScript compiler configuration
+  vite.config.ts        # Vite build tool configuration
+  index.html            # Application entry point
+  docs/                 # LaTeX-standardized documentation
+    api.md
+    frame-presets.md
+    logic-configuration.md
+    normalization.md
+    syntax.md
+  src/
+    backend/            # Pure TypeScript library (no server)
+      types.ts          # Type definitions
+      frameRegistry.ts  # Central frame registry (single source of truth)
+      symbolMap.ts      # ASCII ↔ Unicode mapping
+      ast.ts            # AST factories and utilities
+      lexer.ts          # Tokenizer
+      parser.ts         # Recursive descent parser
+      normalizer.ts     # Formula rewriting
+      model.ts          # Kripke model validation
+      constraints.ts    # Frame constraint checkers
+      logicProfile.ts   # Logic profiles (derived from registry)
+      checker.ts        # Bottom-up model checker
+      dot.ts            # DOT graph generator
+      graphUtils.ts     # Graph visualization helpers
+      service.ts        # Public API orchestrator
+      index.ts          # Re-exports
+    frontend/                    # React + Tailwind UI layer
+      components/                # UI components
+        ui/                      # Reusable shadcn/ui components
+          badge.tsx
+          button.tsx
+          card.tsx
+          checkbox.tsx
+          input.tsx
+          separator.tsx
+        FormulaBuilder.tsx       # Formula structure editor
+        FormulaInput.tsx         # Text input for formulas
+        FormulaPreview.tsx       # Live normalized formula preview
+        Header.tsx               # Top navigation bar
+        KripkeGraph.tsx          # DOT/Graphviz model visualization
+        LogicPanel.tsx           # Frame constraint/preset selection
+        ModelEditor.tsx          # Worlds/Edges/Valuation editor
+        NormalizationBanner.tsx  # Simplification suggestions
+        ResultPanel.tsx          # Evaluation results and traces
+        SubformulaTable.tsx      # Truth sets matrix
+      hooks/                     # Custom React hooks
+        useLogicProfile.ts       # Registry-driven logic state
+        useModelChecker.ts       # Evaluation pipeline orchestration
+      lib/                       # Utility functions
+        utils.ts                 # Tailwind class merger
+      App.tsx                    # Main application layout
+      main.tsx                   # React DOM entry point
+      index.css                  # Global styles
+    components/
+      modal-logic-wireframe.tsx # Original wireframe reference
+  tests/
+    backend/                   # Unit tests for the pure library
+      ast.test.ts              # AST factory and utility tests
+      checker.test.ts          # Bottom-up evaluation tests
+      constraints.test.ts      # Frame constraint checking tests
+      dot.test.ts              # DOT generation and atomFilter tests
+      equivalence.test.ts      # Formula equivalence tests
+      frameRegistry.test.ts    # Registry lookup and match tests
+      graphUtils.test.ts       # Graph formatting utility tests
+      lexer.test.ts            # Tokenization tests
+      logicProfile.test.ts     # Logic preset and custom profile tests
+      model.test.ts            # Kripke model validation tests
+      normalizer.test.ts       # Rewrite rule and fixed-point tests
+      parser.test.ts           # AST construction and precedence tests
+      symbolMap.test.ts        # ASCII to Unicode mapping tests
+    integration/               # Cross-component testing
+      pipeline.test.ts         # Full end-to-end pipeline trace tests
+      service.test.ts          # Public API orchestrator tests
 ```
 
 ## Documentation
